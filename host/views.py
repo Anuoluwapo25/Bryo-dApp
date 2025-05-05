@@ -6,8 +6,8 @@ from .models import PaymentSettings
 from .serializers import PaymentLinkCreateSerializer, PaymentSettingsSerializer
 from rest_framework.decorators import api_view
 from django.http import JsonResponse
-from .utils import get_privy_auth_url, exchange_code_for_user
-from .models import PrivyUser
+# from .utils import get_privy_auth_url, exchange_code_for_user
+# from .models import PrivyUser
 import requests
 import os
 

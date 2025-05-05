@@ -1,0 +1,22 @@
+from django.db import models
+
+class PaymentSettings(models.Model):    
+    """Singleton model to store payment link settings"""
+    success_message = models.TextField(default="Thank you for your payment!")    
+    inactive_message = models.TextField(default="This payment link is no longer active.", blank=True)    
+    redirect_url = models.URLField(default="", blank=True)    
+    branding_image = models.ImageField(upload_to='payment_branding/', blank=True, null=True)    
+    payment_limit = models.PositiveIntegerField(default=0, blank=True, help_text="0 means unlimited")
+    
+    def save(self, *args, **kwargs):
+        self.pk = 1  # Ensures only one instance is saved (singleton)
+        super().save(*args, **kwargs)        
+
+    @classmethod  # <-- Moved out of `save`
+    def load(cls):
+        obj, created = cls.objects.get_or_create(pk=1)
+        return obj
+
+    class Meta:  # <-- Moved out of `save`
+        verbose_name = "Payment Settings"
+        verbose_name_plural = "Payment Settings"
