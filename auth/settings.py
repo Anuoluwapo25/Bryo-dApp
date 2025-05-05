@@ -22,8 +22,11 @@ load_dotenv()  # Load .env file if you're using it
 
 # ... other settings ...
 
-# BlockRadar Settings
+# BlockRadar  and Privy Settings
 BLOCKRADAR_API_KEY = os.environ.get('BLOCKRADAR_API_KEY')
+PRIVY_APP_ID = os.environ.get('PRIVY_APP_ID')
+PRIVY_APP_SECRET = os.environ.get('PRIVY_APP_SECRET')
+FRONTEND_URL = os.environ.get('FRONTEND_URL')
 
 
 # Quick-start development settings - unsuitable for production
