@@ -32,3 +32,7 @@ class PrivyUser(models.Model):
 
     def __str__(self):
         return self.email or self.wallet_address or self.privy_id
+    
+class WaitList(models.Model):
+    email = models.EmailField(unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)

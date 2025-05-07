@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PaymentSettings
+from .models import PaymentSettings, WaitList
 
 class PaymentLinkCreateSerializer(serializers.Serializer):
     """Serializer for creating payment links"""
@@ -14,3 +14,17 @@ class PaymentSettingsSerializer(serializers.ModelSerializer):
     class Meta:
         model = PaymentSettings
         fields = ['success_message', 'inactive_message', 'redirect_url', 'payment_limit', 'branding_image']
+
+
+class WaitListSerializer(serializers.Serializer):
+    """Serializer for Wait Links"""
+    email=serializers.CharField(required=True)
+
+class WaitListSerializer(serializers.ModelSerializer):
+    """Serializer for Wait List"""
+    class Meta:
+        model = WaitList
+        fields = ['email']
+        extra_kwargs = {
+            'email': {'required': True}
+        }

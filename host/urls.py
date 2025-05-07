@@ -2,6 +2,7 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from .views import (
     PaymentLinkViewSet, PaymentSettingsViewSet,
+    WaitListViewSet,
     privy_auth_start,
     privy_auth_callback,
     current_user_view,
@@ -13,6 +14,7 @@ from .views import (
 router = DefaultRouter()
 router.register(r'payment-settings', PaymentSettingsViewSet, basename='payment-settings')
 router.register(r'payment-links', PaymentLinkViewSet, basename='payment-links')
+router.register(r'waitlist', WaitListViewSet, basename='waitlist')
 
 urlpatterns = [
     path('api/', include(router.urls)),

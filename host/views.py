@@ -1,22 +1,21 @@
 from rest_framework import viewsets, status
 from rest_framework.decorators import action, api_view
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from .models import PaymentSettings
-from .serializers import PaymentLinkCreateSerializer, PaymentSettingsSerializer
+from .serializers import PaymentLinkCreateSerializer, PaymentSettingsSerializer, WaitListSerializer
 from django.http import JsonResponse
 from django.http import JsonResponse
 from django.contrib.auth import login
-from .models import PrivyUser
+from .models import PrivyUser, WaitList
 from .utils import get_privy_auth_url, exchange_code_for_token, get_user_info, verify_token
-from .models import PrivyUser
 import uuid
 import requests
 import os
 
 class PaymentLinkViewSet(viewsets.ViewSet):
     """ViewSet for creating and managing payment links"""
-    parser_classes = [MultiPartParser, FormParser]
+    parser_classes = [JSONParser, MultiPartParser, FormParser]
     
     @action(detail=False, methods=['post'], url_path='create')
     def create_payment_link(self, request):
@@ -101,6 +100,29 @@ class PaymentSettingsViewSet(viewsets.ModelViewSet):
         return PaymentSettings.load()
 
 
+class WaitListViewSet(viewsets.ModelViewSet):
+    queryset = WaitList.objects.all()
+    serializer_class = WaitListSerializer
+
+    @action(detail=False, methods=['post'], url_path='lists')
+    def wait_list(self, request):
+        email=request.data.get('email')
+
+        if WaitList.objects.filter(email=email).exists():
+            return Response(
+                {
+                    'detail': 'Email already exists in waitlist'
+                    
+                }, status=400)
+
+        serializer = self.get_serializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=400)
+        
+        serializer.save()
+        return Response(serializer.data, status=201)
+
+        
 
 def privy_auth_start(request):
     """Step 1: Generate Privy auth URL"""
