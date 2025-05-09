@@ -20,7 +20,6 @@ urlpatterns = [
     path('api/', include(router.urls)),
     path('api/auth/start/', privy_auth_start, name='privy-auth-start'),
     path('api/auth/callback/', privy_auth_callback, name='privy-auth-callback'),
-    
     path('api/current-user/', current_user_view, name='current-user'),
     path('api/protected/', protected_test_view, name='protected-test'),
     path('api/logout/', logout_view, name='logout'),
