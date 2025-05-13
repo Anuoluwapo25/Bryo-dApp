@@ -18,9 +18,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 import os
 from dotenv import load_dotenv
 
-load_dotenv()  # Load .env file if you're using it
+load_dotenv() 
 
-# ... other settings ...
+
 
 # BlockRadar  and Privy Settings
 BLOCKRADAR_API_KEY = os.environ.get('BLOCKRADAR_API_KEY')
@@ -51,10 +51,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
+    'corsheaders',
     'host',
 ]
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'auth.middleware.PrivyAuthMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -65,6 +68,15 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'auth.urls'
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'auth.authentication.PrivyAuthentication',
+        'path.to.PrivyAuthentication',
+    ],
+}
+
+
 
 TEMPLATES = [
     {
