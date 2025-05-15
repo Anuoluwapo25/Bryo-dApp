@@ -18,4 +18,4 @@ class PrivyAuthentication(BaseAuthentication):
                 "email": decoded.get("email", {}).get("address", ""),
             }
         )
-        return (privy_user, None)  # (user, auth)
+        return (privy_user, None) 

@@ -87,11 +87,9 @@ class EventTicket(models.Model):
     ]
     
     event = models.ForeignKey('Event', on_delete=models.CASCADE, related_name='tickets')
-    original_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='original_tickets')
-    current_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='current_tickets')
-    
-    ticket_code = models.CharField(max_length=50, unique=True)
-    
+    original_owner = models.ForeignKey(PrivyUser, on_delete=models.CASCADE, related_name='original_tickets')
+    current_owner = models.ForeignKey(PrivyUser, on_delete=models.CASCADE, related_name='current_tickets')
+        
     status = models.CharField(
         max_length=20, 
         choices=TICKET_STATUS_CHOICES, 
@@ -100,9 +98,13 @@ class EventTicket(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
     last_transferred_at = models.DateTimeField(null=True, blank=True)
+
+    class Meta:
+        unique_together = ('event', 'current_owner') 
     
     def __str__(self):
         return f"Ticket for {self.event.name} - {self.ticket_code}"
+    
 
 class TicketTransfer(models.Model):
     """
