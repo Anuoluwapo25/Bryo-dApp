@@ -1,5 +1,5 @@
 import requests
-from django.core.exceptions import ImproperlyConfigured, AuthenticationFailed
+from django.core.exceptions import ImproperlyConfigured
 from rest_framework.exceptions import AuthenticationFailed
 
 import jwt

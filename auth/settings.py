@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 import os
@@ -57,7 +56,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware',
-    'auth.middleware.PrivyAuthMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -69,12 +67,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'auth.urls'
 
-REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': [
-        'auth.authentication.PrivyAuthentication',
-        'path.to.PrivyAuthentication',
-    ],
-}
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': [
+#         'auth.authentication.PrivyAuthentication',
+#         'path.to.PrivyAuthentication',
+#     ],
+# }
 
 
 
@@ -127,7 +125,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOWED_ORIGINS = [
-    os.getenv('FRONTEND_URL'),
+    "http://localhost:3000", 
+    'https://www.byro.africa',
+    'https://byro-two.vercel.app',
+    'http://localhost:3000',
 ]
 
 # Internationalization

@@ -6,11 +6,8 @@ from .models import PaymentSettings
 from .serializers import PaymentLinkCreateSerializer, PaymentSettingsSerializer, WaitListSerializer
 from django.http import JsonResponse
 from rest_framework.permissions import IsAuthenticated
-from rest_framework.authentication import BaseAuthentication
-from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import login
 from .models import PrivyUser, WaitList
-from .utils import get_privy_auth_url, exchange_code_for_token, get_user_info, verify_token
 import uuid
 import requests
 import os
@@ -131,83 +128,4 @@ class WaitListViewSet(viewsets.ModelViewSet):
 def drf_protected_view(request):
     return Response({"user_id": request.user.privy_id})
 
-
-# def privy_auth_start(request):
-#     """Step 1: Generate Privy auth URL"""
-#     state = str(uuid.uuid4())
-#     request.session['oauth_state'] = state
-#     return JsonResponse({
-#         'url': get_privy_auth_url(state),
-#         'state': state  
-#     })
-
-# def privy_auth_callback(request):
-#     """Step 2: Handle Privy callback"""
-    
-#     if request.GET.get('state') != request.session.get('oauth_state'):
-#         return JsonResponse({'error': 'Invalid state'}, status=400)
-    
-#     try:
-        
-#         code = request.GET.get('code')
-#         tokens = exchange_code_for_token(code)
-#         privy_user = get_user_info(tokens['access_token'])
-        
-        
-#         user, created = PrivyUser.objects.update_or_create(
-#             privy_id=privy_user['sub'],
-#             defaults={
-#                 'email': privy_user.get('email'),
-#                 'wallet_address': privy_user.get('wallet_address'),
-#             }
-#         )
-        
-#         login(request, user)
-        
-#         response = JsonResponse({
-#             'user_id': user.id,
-#             'email': user.email,
-#             'access_token': tokens['access_token']  
-#         })
-#         response.set_cookie(
-#             'session_token',
-#             tokens['access_token'],
-#             httponly=True,
-#             secure=request.is_secure(),
-#             max_age=3600
-#         )
-#         return response
-        
-#     except Exception as e:
-#         return JsonResponse({'error': str(e)}, status=400)
-
-# def current_user_view(request):
-#     """Test endpoint: Get current user from DB"""
-#     token = request.COOKIES.get('session_token') or request.GET.get('token')
-#     if not token:
-#         return JsonResponse({'error': 'Unauthorized'}, status=401)
-    
-#     try:
-#         privy_user = verify_token(token)
-#         user = PrivyUser.objects.get(privy_id=privy_user['sub'])
-#         return JsonResponse({
-#             'id': user.id,
-#             'email': user.email,
-#             'wallet_address': user.wallet_address
-#         })
-#     except Exception as e:
-#         return JsonResponse({'error': str(e)}, status=401)
-
-# def protected_test_view(request):
-#     """Test endpoint: For authenticated users only"""
-#     return JsonResponse({
-#         'message': 'You are authenticated!',
-#         'user': str(request.user) if request.user.is_authenticated else None
-#     })
-
-# def logout_view(request):
-#     """Clear session"""
-#     response = JsonResponse({'message': 'Logged out'})
-#     response.delete_cookie('session_token')
-#     return response
 
